@@ -22,9 +22,9 @@ Authorization Proxy acts as a reverse proxy sitting in front of the user applica
 
 To authenticate the request, the authorization proxy should know which user can take an action to which resource, therefore the policy updater is introduced.
 
-![Policy updater](https://github.com/yahoojapan/athenz-policy-updater/raw/master/doc/policy_updater_overview.png)
+![Policy updater](https://github.com/yahoojapan/athenz-authorizer/raw/master/doc/policy_updater_overview.png)
 
-The [policy updater](https://github.com/yahoojapan/athenz-policy-updater) periodically updates the Athenz PublicKey and Policy data from Athenz Server and validate and decode the policy data. The decoded result will store in the memory cache inside the policy updater.
+The [policy updater](https://github.com/yahoojapan/athenz-authorizer) periodically updates the Athenz PublicKey and Policy data from Athenz Server and validate and decode the policy data. The decoded result will store in the memory cache inside the policy updater.
 
 #### Authorization success
 

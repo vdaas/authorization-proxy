@@ -41,11 +41,13 @@ func TestNew(t *testing.T) {
 				name: "check request can redirect",
 				args: args{
 					cfg: config.Proxy{
-						Host: strings.Split(strings.Replace(srv.URL, "http://", "", 1), ":")[0],
-						Port: func() uint16 {
-							a, _ := strconv.ParseInt(strings.Split(srv.URL, ":")[2], 0, 64)
-							return uint16(a)
-						}(),
+						HTTP: config.HTTP{
+							Host: strings.Split(strings.Replace(srv.URL, "http://", "", 1), ":")[0],
+							Port: func() uint16 {
+								a, _ := strconv.ParseInt(strings.Split(srv.URL, ":")[2], 0, 64)
+								return uint16(a)
+							}(),
+						},
 					},
 					bp: infra.NewBuffer(64),
 					prov: &service.AuthorizedMock{
@@ -79,11 +81,13 @@ func TestNew(t *testing.T) {
 				name: "check request unauthorized",
 				args: args{
 					cfg: config.Proxy{
-						Host: strings.Split(strings.Replace(srv.URL, "http://", "", 1), ":")[0],
-						Port: func() uint16 {
-							a, _ := strconv.ParseInt(strings.Split(srv.URL, ":")[2], 0, 64)
-							return uint16(a)
-						}(),
+						HTTP: config.HTTP{
+							Host: strings.Split(strings.Replace(srv.URL, "http://", "", 1), ":")[0],
+							Port: func() uint16 {
+								a, _ := strconv.ParseInt(strings.Split(srv.URL, ":")[2], 0, 64)
+								return uint16(a)
+							}(),
+						},
 					},
 					bp: infra.NewBuffer(64),
 					prov: &service.AuthorizedMock{
@@ -114,12 +118,14 @@ func TestNew(t *testing.T) {
 				name: "check request can redirect to configured scheme",
 				args: args{
 					cfg: config.Proxy{
-						Host: strings.Split(strings.Replace(srv.URL, "http://", "", 1), ":")[0],
-						Port: func() uint16 {
-							a, _ := strconv.ParseInt(strings.Split(srv.URL, ":")[2], 0, 64)
-							return uint16(a)
-						}(),
-						Scheme: "http",
+						HTTP: config.HTTP{
+							Host: strings.Split(strings.Replace(srv.URL, "http://", "", 1), ":")[0],
+							Port: func() uint16 {
+								a, _ := strconv.ParseInt(strings.Split(srv.URL, ":")[2], 0, 64)
+								return uint16(a)
+							}(),
+							Scheme: "http",
+						},
 					},
 					bp: infra.NewBuffer(64),
 					prov: &service.AuthorizedMock{
@@ -147,8 +153,10 @@ func TestNew(t *testing.T) {
 				name: "check request destination cannot reach",
 				args: args{
 					cfg: config.Proxy{
-						Host: "dummyHost",
-						Port: 9999,
+						HTTP: config.HTTP{
+							Host: "dummyHost",
+							Port: 9999,
+						},
 					},
 					bp: infra.NewBuffer(64),
 					prov: &service.AuthorizedMock{
@@ -179,11 +187,13 @@ func TestNew(t *testing.T) {
 				name: "check context done",
 				args: args{
 					cfg: config.Proxy{
-						Host: strings.Split(strings.Replace(srv.URL, "http://", "", 1), ":")[0],
-						Port: func() uint16 {
-							a, _ := strconv.ParseInt(strings.Split(srv.URL, ":")[2], 0, 64)
-							return uint16(a)
-						}(),
+						HTTP: config.HTTP{
+							Host: strings.Split(strings.Replace(srv.URL, "http://", "", 1), ":")[0],
+							Port: func() uint16 {
+								a, _ := strconv.ParseInt(strings.Split(srv.URL, ":")[2], 0, 64)
+								return uint16(a)
+							}(),
+						},
 					},
 					bp: infra.NewBuffer(64),
 					prov: &service.AuthorizedMock{

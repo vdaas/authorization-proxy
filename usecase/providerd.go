@@ -26,7 +26,7 @@ import (
 	"github.com/yahoojapan/authorization-proxy/infra"
 	"github.com/yahoojapan/authorization-proxy/service"
 
-	providerd "github.com/yahoojapan/athenz-policy-updater"
+	authorizerd "github.com/yahoojapan/athenz-authorizer"
 )
 
 // AuthorizationDaemon represents Authorization Proxy daemon behavior.
@@ -59,7 +59,7 @@ func New(cfg config.Config) (AuthorizationDaemon, error) {
 // Start returns an error slice channel. This error channel reports the errors inside Authorization Proxy server.
 func (g *providerDaemon) Start(ctx context.Context) <-chan []error {
 	ech := make(chan []error)
-	pch := g.athenz.StartProviderd(ctx)
+	pch := g.athenz.Start(ctx)
 	sch := g.server.ListenAndServe(ctx)
 	go func() {
 		emap := make(map[error]uint64, 1)
@@ -75,15 +75,13 @@ func (g *providerDaemon) Start(ctx context.Context) <-chan []error {
 				errs = append(errs, ctx.Err())
 				ech <- errs
 				return
-			case e := <-pch:
-				glg.Errorf("pch %v", e)
-				glg.Error(e)
-				cause := errors.Cause(e)
-				_, ok := emap[cause]
+			case err := <-pch:
+				glg.Errorf("pch %v", err)
+				_, ok := emap[err]
 				if !ok {
-					emap[cause] = 0
+					emap[err] = 0
 				}
-				emap[cause]++
+				emap[err]++
 			case errs := <-sch:
 				glg.Errorf("sch %v", errs)
 				ech <- errs
@@ -96,16 +94,16 @@ func (g *providerDaemon) Start(ctx context.Context) <-chan []error {
 }
 
 func newAuthorizationd(cfg config.Config) (service.Authorizationd, error) {
-	return providerd.New(
-		providerd.AthenzURL(cfg.Athenz.URL),
-		providerd.PubkeyRefreshDuration(cfg.Authorization.PubKeyRefreshDuration),
-		providerd.PubkeySysAuthDomain(cfg.Authorization.PubKeySysAuthDomain),
-		providerd.PubkeyEtagExpTime(cfg.Authorization.PubKeyEtagExpTime),
-		providerd.PubkeyEtagFlushDur(cfg.Authorization.PubKeyEtagFlushDur),
-		providerd.AthenzDomains(cfg.Authorization.AthenzDomains...),
-		providerd.PolicyExpireMargin(cfg.Authorization.PolicyExpireMargin),
-		providerd.PolicyRefreshDuration(cfg.Authorization.PolicyRefreshDuration),
-		providerd.PolicyEtagFlushDur(cfg.Authorization.PolicyEtagFlushDur),
-		providerd.PolicyEtagExpTime(cfg.Authorization.PolicyEtagExpTime),
+	return authorizerd.New(
+		authorizerd.AthenzURL(cfg.Athenz.URL),
+		authorizerd.PubkeyRefreshDuration(cfg.Authorization.PubKeyRefreshDuration),
+		authorizerd.PubkeySysAuthDomain(cfg.Authorization.PubKeySysAuthDomain),
+		authorizerd.PubkeyEtagExpTime(cfg.Authorization.PubKeyEtagExpTime),
+		authorizerd.PubkeyEtagFlushDur(cfg.Authorization.PubKeyEtagFlushDur),
+		authorizerd.AthenzDomains(cfg.Authorization.AthenzDomains...),
+		authorizerd.PolicyExpireMargin(cfg.Authorization.PolicyExpireMargin),
+		authorizerd.PolicyRefreshDuration(cfg.Authorization.PolicyRefreshDuration),
+		authorizerd.PolicyEtagFlushDur(cfg.Authorization.PolicyEtagFlushDur),
+		authorizerd.PolicyEtagExpTime(cfg.Authorization.PolicyEtagExpTime),
 	)
 }

@@ -103,6 +103,23 @@ type Athenz struct {
 
 // Proxy represent the proxy destination of the authorization proxy.
 type Proxy struct {
+	GRPC GRPC `yaml:"grpc"`
+
+	HTTP HTTP `yaml:"http"`
+
+	// RoleHeader represent the HTTP header key name of the role token for Role token proxy request.
+	RoleHeader string `yaml:"role_header_key"`
+}
+
+type GRPC struct {
+	// Host represent the proxy destination host, for example localhost.
+	Host string `yaml:"host"`
+
+	// Port represent the proxy destination port number.
+	Port uint16 `yaml:"port"`
+}
+
+type HTTP struct {
 	// Scheme represent the HTTP URL scheme of the proxy destination, default is http.
 	Scheme string `yaml:"scheme"`
 
@@ -111,9 +128,6 @@ type Proxy struct {
 
 	// Port represent the proxy destination port number.
 	Port uint16 `yaml:"port"`
-
-	// RoleHeader represent the HTTP header key name of the role token for Role token proxy request.
-	RoleHeader string `yaml:"role_header_key"`
 
 	// BufferSize represent the reverse proxy buffer size.
 	BufferSize uint64 `yaml:"buffer_size"`

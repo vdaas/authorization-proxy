@@ -34,11 +34,11 @@ import (
 // New creates a handler for handling different HTTP requests based on the given services. It also contains a reverse proxy for handling proxy request.
 func New(cfg config.Proxy, bp httputil.BufferPool, prov service.Authorizationd) http.Handler {
 	scheme := "http"
-	if cfg.Scheme != "" {
-		scheme = cfg.Scheme
+	if cfg.HTTP.Scheme != "" {
+		scheme = cfg.HTTP.Scheme
 	}
 
-	host := fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)
+	host := fmt.Sprintf("%s:%d", cfg.HTTP.Host, cfg.HTTP.Port)
 
 	return &httputil.ReverseProxy{
 		BufferPool: bp,

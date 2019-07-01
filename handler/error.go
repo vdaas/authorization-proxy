@@ -41,4 +41,7 @@ const (
 
 	// ErrMsgVerifyRoleToken "VerifyRoleToken returned error in RoundTrip"
 	ErrMsgVerifyRoleToken = "VerifyRoleToken returned error in RoundTrip"
+
+	// ErrRPCMetadataNotFound "gRPC metadata not found"
+	ErrRPCMetadataNotFound = "gRPC metadata not found"
 )
